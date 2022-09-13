@@ -2,15 +2,15 @@ import React from 'react';
 import NewPostForm from './NewPostForm';
 import PostList from './PostList';
 import EditPostForm from './EditPostForm';
+import { connect } from 'react-redux';
 import PostDetail from './PostDetail';
+import PropTypes from "prop-types";
 
 class PostControl extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      formVisibleOnPage: false,
-      mainPostList: [],
       selectedPost: null,
       editing: false
     };
@@ -19,23 +19,27 @@ class PostControl extends React.Component {
   handleClick = () => {
     if (this.state.selectedPost != null) {
       this.setState({
-        formVisibleOnPage: false,
         selectedPost: null,
         editing: false
       });
     } else {
-      this.setState(prevState => ({
-        formVisibleOnPage: !prevState.formVisibleOnPage,
-      }));
+        const { dispatch } = this.props;
+        const action = {
+         type: 'TOGGLE_FORM'
+        }
+        dispatch(action);
+      };
     }
-  }
+  
 
   handleDeletingPost = (id) => {
-    const newMainPostList = this.state.mainPostList.filter(post => post.id !== id);
-    this.setState({
-      mainPostList: newMainPostList,
-      selectedPost: null
-    });
+    const { dispatch } = this.props;
+    const action = {
+      type: 'DELETE_POST',
+      id: id
+    }
+    dispatch(action);
+    this.setState({selectedPost: null});
   }
 
   handleEditClick = () => {
@@ -43,24 +47,42 @@ class PostControl extends React.Component {
   }
 
   handleEditingPostInList = (postToEdit) => {
-    const editedMainPostList = this.state.mainPostList
-      .filter(post => post.id !== this.state.selectedPost.id)
-      .concat(postToEdit);
+    const { dispatch } = this.props;
+    const { id, userName, topic, postBody } = postToEdit;
+    const action = {
+      type: 'ADD_POST',
+      id: id,
+      userName: userName,
+      topic: topic,
+      postBody: postBody,
+    }
+    dispatch(action);
     this.setState({
-      mainPostList: editedMainPostList,
       editing: false,
       selectedPost: null
     });
   }
 
+
   handleAddingNewPostToList = (newPost) => {
-    const newMainPostList = this.state.mainPostList.concat(newPost);
-    this.setState({mainPostList: newMainPostList});
-    this.setState({formVisibleOnPage: false});
+    const { dispatch } = this.props;
+    const { id, userName, topic, postBody } = newPost;
+    const action = {
+      type: 'ADD_POST',
+      id: id,
+      userName: userName,
+      topic: topic,
+      postBody: postBody,
+    }
+    dispatch(action);
+    const action2 = {
+      type: 'TOGGLE_FORM'
+    }
+    dispatch(action2);
   }
 
   handleChangingSelectedPost = (id) => {
-    const selectedPost = this.state.mainPostList.filter(post => post.id === id)[0];
+    const selectedPost = this.props.mainPostList[id];
     this.setState({selectedPost: selectedPost});
   }
 
@@ -76,11 +98,11 @@ class PostControl extends React.Component {
       onClickingDelete={this.handleDeletingPost}
       onClickingEdit = {this.handleEditClick} />
       buttonText = "Return to Post List";
-    } else if (this.state.formVisibleOnPage) {
+    } else if (this.props.formVisibleOnPage) {
       currentlyVisibleState = <NewPostForm onNewPostCreation={this.handleAddingNewPostToList}/>;
       buttonText = "Return to Post List"; 
     } else {
-      currentlyVisibleState = <PostList onPostSelection={this.handleChangingSelectedPost} postList={this.state.mainPostList} />;
+      currentlyVisibleState = <PostList postList={this.props.mainPostList} onPostSelection={this.handleChangingSelectedPost} />;
       buttonText = "Add Post"; 
     }
     return (
@@ -90,8 +112,21 @@ class PostControl extends React.Component {
       </React.Fragment>
     );
   }
-
 }
+
+PostControl.propTypes = {
+  mainPostList: PropTypes.object,
+  formVisibleOnPage: PropTypes.bool
+};
+
+const mapStateToProps = state => {
+  return {
+    mainPostList: state.mainPostList,
+    formVisibleOnPage: state.formVisibleOnPage
+  }
+}
+
+PostControl = connect(mapStateToProps)(PostControl);
 
 export default PostControl;
 

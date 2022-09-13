@@ -6,7 +6,7 @@ function PostList(props){
   return (
     <React.Fragment>
       <hr />
-      {props.postList.map((post) =>
+      {Object.values(props.postList).map((post) =>
         <Post
           whenPostClicked = { props.onPostSelection }
           userName={post.userName}
