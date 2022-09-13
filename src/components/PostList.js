@@ -6,17 +6,16 @@ function PostList(props){
   return (
     <React.Fragment>
       <hr />
-      {Object.values(props.PostList).map((Post) =>
+      {props.postList.map((post) =>
         <Post
           whenPostClicked = { props.onPostSelection }
-          userName={Post.userName}
-          topic={Post.topic}
-          postBody={Post.postBody}
-          formattedWaitTime={Post.formattedWaitTime}
-          id={Post.id}
-          key={Post.id}/>
+          userName={post.userName}
+          topic={post.topic}
+          postBody={post.postBody}
+          formattedWaitTime={post.formattedWaitTime}
+          id={post.id}
+          key={post.id}/>
       )}
-      {/* Don't forget to add the curly brace above — otherwise there will be a syntax error. */}
     </React.Fragment>
   );
 }
