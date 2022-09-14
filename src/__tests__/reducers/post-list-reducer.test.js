@@ -1,5 +1,6 @@
 import postListReducer from '../../reducers/post-list-reducer';
 import * as c from '../../actions/ActionTypes';
+import { formatDistanceToNow } from 'date-fns';
 
 describe('postListReducer', () => {
 
@@ -22,6 +23,10 @@ const currentState = {
     userName: 'Ryan',
     topic: 'stuff',
     postBody: 'Redux action is not working correctly.',
+    timeOpen : new Date(),
+    formattedWaitTime: formatDistanceToNow(new Date(), {
+      addSuffix: true
+    }),
     id: 1
   };
   
@@ -29,25 +34,29 @@ const currentState = {
     expect(postListReducer({}, { type: null })).toEqual({});
   });
 
-  test('Should successfully add new post data to mainPostList', () => {
-    const { userName, topic, postBody, id } = postData;
+  test('should successfully add a post to the post list that includes date-fns-formatted wait times', () => {
+    const { userName, topic, postBody, timeOpen, formattedWaitTime, id } = postData;
     action = {
       type: c.ADD_POST,
       userName: userName,
       topic: topic,
       postBody: postBody,
+      timeOpen: timeOpen,
+      formattedWaitTime: formattedWaitTime,
       id: id
     };
-
     expect(postListReducer({}, action)).toEqual({
       [id] : {
         userName: userName,
         topic: topic,
         postBody: postBody,
+        timeOpen: timeOpen,
+        formattedWaitTime: 'less than a minute ago',
         id: id
       }
     });
   });
+  
     test('Should successfully delete a post', () => {
       action = {
         type: c.DELETE_POST,
@@ -60,6 +69,26 @@ const currentState = {
           postBody: 'Reducer has side effects.',
           id: 1
         }
-      })
-  })
-});
+      });
+    });
+  
+
+    test('Should add a formatted wait time to post entry', () => {
+      const { userName, topic, postBody, timeOpen, id } = postData;
+      action = {
+        type: c.UPDATE_TIME,
+        formattedWaitTime: '4 minutes ago',
+        id: id
+      };
+      expect(postListReducer({ [id] : postData }, action)).toEqual({
+        [id] : {
+          userName: userName,
+          topic: topic,
+          postBody: postBody,
+          timeOpen: timeOpen,
+          id: id,
+          formattedWaitTime: '4 minutes ago'
+        }
+      });
+    });
+  });
