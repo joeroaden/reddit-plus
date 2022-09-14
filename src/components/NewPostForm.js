@@ -2,6 +2,7 @@ import React from "react";
 import { v4 } from 'uuid';
 import PropTypes from "prop-types"; 
 import ReusableForm from "./ReusableForm";
+import { formatDistanceToNow } from 'date-fns';
 
 function NewPostForm(props){
 
@@ -11,7 +12,11 @@ function NewPostForm(props){
       userName: event.target.userName.value, 
       topic: event.target.topic.value, 
       postBody: event.target.postBody.value, 
-      id: v4()
+      id: v4(),
+      timeOpen: new Date(),
+      formattedWaitTime: formatDistanceToNow(new Date(), {
+      addSuffix: true
+      })
     });
   }
 

@@ -11,6 +11,8 @@ function EditPostForm (props) {
       userName: event.target.userName.value, 
       topic: event.target.topic.value, 
       postBody: event.target.postBody.value, 
+      formattedWaitTime: post.formattedWaitTime,
+      timeOpen: post.timeOpen,
       id: post.id
     });
   }

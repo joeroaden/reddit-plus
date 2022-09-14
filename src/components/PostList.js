@@ -6,8 +6,8 @@ function PostList(props){
   return (
     <React.Fragment>
       <hr />
-      {Object.values(props.postList).map((post) =>
-        <Post
+      {Object.values(props.postList).map((post) => {
+        return <Post
           whenPostClicked = { props.onPostSelection }
           userName={post.userName}
           topic={post.topic}
@@ -15,7 +15,7 @@ function PostList(props){
           formattedWaitTime={post.formattedWaitTime}
           id={post.id}
           key={post.id}/>
-      )}
+})}
     </React.Fragment>
   );
 }

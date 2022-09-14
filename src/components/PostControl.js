@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import PostDetail from './PostDetail';
 import PropTypes from "prop-types";
 import * as a from './../actions';
+import { formatDistanceToNow } from 'date-fns';
+
 
 class PostControl extends React.Component {
 
@@ -20,7 +22,7 @@ class PostControl extends React.Component {
   componentDidMount() {
     this.waitTimeUpdateTimer = setInterval(() =>
       this.updatePostElapsedWaitTime(),
-    1000
+    60000
     );
   }
 
@@ -34,7 +36,14 @@ class PostControl extends React.Component {
   }
 
   updatePostElapsedWaitTime = () => {
-    console.log("tick");
+    const { dispatch } = this.props;
+    Object.values(this.props.mainPostList).forEach(post => {
+        const newFormattedWaitTime = formatDistanceToNow(post.timeOpen, {
+          addSuffix: true
+        });
+      const action = a.updateTime(post.id, newFormattedWaitTime);
+      dispatch(action);
+    });
   }
 
 
