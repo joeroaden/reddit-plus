@@ -5,6 +5,7 @@ import EditPostForm from './EditPostForm';
 import { connect } from 'react-redux';
 import PostDetail from './PostDetail';
 import PropTypes from "prop-types";
+import * as a from './../actions';
 
 class PostControl extends React.Component {
 
@@ -16,6 +17,27 @@ class PostControl extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.waitTimeUpdateTimer = setInterval(() =>
+      this.updatePostElapsedWaitTime(),
+    1000
+    );
+  }
+
+  // componentDidUpdate() {
+  //   console.log("component updated!");
+  // }
+
+  componentWillUnmount(){
+    console.log("component unmounted!");
+    clearInterval(this.waitTimeUpdateTimer);
+  }
+
+  updatePostElapsedWaitTime = () => {
+    console.log("tick");
+  }
+
+
   handleClick = () => {
     if (this.state.selectedPost != null) {
       this.setState({
@@ -24,9 +46,7 @@ class PostControl extends React.Component {
       });
     } else {
         const { dispatch } = this.props;
-        const action = {
-         type: 'TOGGLE_FORM'
-        }
+        const action = a.toggleForm()
         dispatch(action);
       };
     }
@@ -34,10 +54,7 @@ class PostControl extends React.Component {
 
   handleDeletingPost = (id) => {
     const { dispatch } = this.props;
-    const action = {
-      type: 'DELETE_POST',
-      id: id
-    }
+    const action = a.deletePost(id)
     dispatch(action);
     this.setState({selectedPost: null});
   }
@@ -46,40 +63,26 @@ class PostControl extends React.Component {
     this.setState({editing: true});
   }
 
-  handleEditingPostInList = (postToEdit) => {
-    const { dispatch } = this.props;
-    const { id, userName, topic, postBody } = postToEdit;
-    const action = {
-      type: 'ADD_POST',
-      id: id,
-      userName: userName,
-      topic: topic,
-      postBody: postBody,
+
+    handleEditingPostInList = (postToEdit) => {
+      const { dispatch } = this.props;
+      const action = a.addPost(postToEdit);
+      dispatch(action);
+      this.setState({
+        editing: false,
+        selectedPost: null
+      });
     }
-    dispatch(action);
-    this.setState({
-      editing: false,
-      selectedPost: null
-    });
-  }
+
 
 
   handleAddingNewPostToList = (newPost) => {
     const { dispatch } = this.props;
-    const { id, userName, topic, postBody } = newPost;
-    const action = {
-      type: 'ADD_POST',
-      id: id,
-      userName: userName,
-      topic: topic,
-      postBody: postBody,
-    }
+    const action = a.addPost(newPost);
     dispatch(action);
-    const action2 = {
-      type: 'TOGGLE_FORM'
-    }
+    const action2 = a.toggleForm();
     dispatch(action2);
-  }
+  };
 
   handleChangingSelectedPost = (id) => {
     const selectedPost = this.props.mainPostList[id];
