@@ -13,6 +13,7 @@ function PostDetail(props){
       <button onClick= {() => props.onClickingDownVote(post.id)}>DownVote</button>
       <button onClick={ props.onClickingEdit }>Update Post</button>
       <button onClick={()=> onClickingDelete(post.id) }>Delete Post</button> { /* new code */ }
+      <button onClick={()=> props.onClickingSort() }>sort</button>
       <hr/>
     </React.Fragment>
   );
@@ -23,7 +24,8 @@ PostDetail.propTypes = {
   onClickingUpVote: PropTypes.func,
   onClickingDownVote: PropTypes.func,
   onClickingDelete: PropTypes.func,
-  onClickingEdit: PropTypes.func // new code
+  onClickingEdit: PropTypes.func,
+  onClickingSort: PropTypes.func // new code
 };
 
 export default PostDetail;

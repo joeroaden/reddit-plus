@@ -9,11 +9,15 @@ const currentState = {
     userName: 'Ryan',
     topic: 'stuff',
     postBody: 'Redux action is not working correctly.',
+    upVote: 0,
+    downVote: 0,
     id: 1
   }, 2: {
     userName: 'Jasmine',
     topic: 'more stuff',
     postBody: 'Reducer has side effects.',
+    upVote: 0,
+    downVote: 0,
     id: 1
   }
 }
@@ -23,6 +27,8 @@ const currentState = {
     userName: 'Ryan',
     topic: 'stuff',
     postBody: 'Redux action is not working correctly.',
+    upVote: 0,
+    downVote: 0,
     timeOpen : new Date(),
     formattedWaitTime: formatDistanceToNow(new Date(), {
       addSuffix: true
@@ -35,13 +41,15 @@ const currentState = {
   });
 
   test('should successfully add a post to the post list that includes date-fns-formatted wait times', () => {
-    const { userName, topic, postBody, timeOpen, formattedWaitTime, id } = postData;
+    const { userName, topic, postBody, timeOpen, formattedWaitTime, upVote, downVote, id } = postData;
     action = {
       type: c.ADD_POST,
       userName: userName,
       topic: topic,
       postBody: postBody,
       timeOpen: timeOpen,
+      upVote: upVote,
+      downVote: downVote,
       formattedWaitTime: formattedWaitTime,
       id: id
     };
@@ -52,6 +60,8 @@ const currentState = {
         postBody: postBody,
         timeOpen: timeOpen,
         formattedWaitTime: 'less than a minute ago',
+        upVote: upVote,
+        downVote: downVote,
         id: id
       }
     });
@@ -67,6 +77,8 @@ const currentState = {
           userName: 'Jasmine',
           topic: 'more stuff',
           postBody: 'Reducer has side effects.',
+          upVote: 0,
+          downVote: 0,
           id: 1
         }
       });
@@ -74,7 +86,7 @@ const currentState = {
   
 
     test('Should add a formatted wait time to post entry', () => {
-      const { userName, topic, postBody, timeOpen, id } = postData;
+      const { userName, topic, postBody, timeOpen, upVote, downVote, id } = postData;
       action = {
         type: c.UPDATE_TIME,
         formattedWaitTime: '4 minutes ago',
@@ -86,6 +98,8 @@ const currentState = {
           topic: topic,
           postBody: postBody,
           timeOpen: timeOpen,
+          upVote: upVote,
+          downVote: downVote,
           id: id,
           formattedWaitTime: '4 minutes ago'
         }

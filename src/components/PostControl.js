@@ -7,7 +7,7 @@ import PostDetail from './PostDetail';
 import PropTypes from "prop-types";
 import * as a from './../actions';
 import { formatDistanceToNow } from 'date-fns';
-
+import { orderBy } from 'lodash'
 
 class PostControl extends React.Component {
 
@@ -16,8 +16,30 @@ class PostControl extends React.Component {
     this.state = {
       selectedPost: null,
       editing: false,
+      collection: props,
+       sortParams: {
+         direction: undefined
+      }
     }
     // this.handleClick = this.handleClick.bind(this);
+  }
+   handleColumnHeaderClick() {
+     const {
+      collection,
+     sortParams: { direction }
+   } = this.state;
+     const sortDirection = direction === "desc" ? "asc" : "desc";
+     const sortedCollection = orderBy(
+      collection,
+      ["upVote"]
+      [sortDirection]
+     )
+     this.setState({
+      collection: sortedCollection,
+      sortParams: {
+        direction:sortDirection
+      }
+     })
   }
 
   componentDidMount() {
@@ -154,7 +176,8 @@ class PostControl extends React.Component {
       onClickingDelete={this.handleDeletingPost}
       onClickingEdit = {this.handleEditClick} 
       onClickingUpVote = {this.handleAddUpVote}
-      onClickingDownVote = {this.handleAddDownVote}/>
+      onClickingDownVote = {this.handleAddDownVote}
+      onClickingSort = {this.handleColumnHeaderClick}/>
       buttonText = "Return to Post List";
     } else if (this.props.formVisibleOnPage) {
       currentlyVisibleState = <NewPostForm onNewPostCreation={this.handleAddingNewPostToList}/>;
@@ -178,6 +201,7 @@ PostControl.propTypes = {
 };
 
 const mapStateToProps = state => {
+
   return {
     mainPostList: state.mainPostList,
     formVisibleOnPage: state.formVisibleOnPage
