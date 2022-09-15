@@ -15,7 +15,9 @@ function NewPostForm(props){
       id: v4(),
       timeOpen: new Date(),
       formattedWaitTime: formatDistanceToNow(new Date(), {
-      addSuffix: true
+      addSuffix: true,
+      upVote: 0,
+      downVote: 0
       })
     });
   }

@@ -2,7 +2,7 @@ import * as c from './../actions/ActionTypes';
 
 
 const reducer = (state = {}, action) => {
-  const { userName, topic, postBody, id, formattedWaitTime, timeOpen } = action;
+  const { userName, topic, postBody, id, formattedWaitTime, timeOpen, upVote, downVote } = action;
   switch (action.type) {
   case c.ADD_POST:
     return Object.assign({}, state, {
@@ -12,6 +12,8 @@ const reducer = (state = {}, action) => {
         postBody: postBody,
         formattedWaitTime: formattedWaitTime,
         timeOpen: timeOpen,
+        upVote: 0,
+        downVote: 0,
         id: id
       }
     });
@@ -29,5 +31,6 @@ const reducer = (state = {}, action) => {
   return state;
   }
 };
+
 
 export default reducer; 

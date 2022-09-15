@@ -15,8 +15,9 @@ class PostControl extends React.Component {
     super(props);
     this.state = {
       selectedPost: null,
-      editing: false
-    };
+      editing: false,
+    }
+    // this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +99,49 @@ class PostControl extends React.Component {
     this.setState({selectedPost: selectedPost});
   }
 
+  // handleAddUpVote = (postToUpvote) => {
+  //   const { dispatch } = this.props;
+  //   const action = a.addPost(postToUpvote);
+  //   // dispatch(action)
+  //   const newUpVoteCount = (this.upVote + 1)
+    // const selectedPost = this.props.selectedPost;
+    // const add = Object.assign({}, selectedPost, {upVote: selectedPost.upVote + 1});
+    // const editMainPost = this.props.mainPostList
+    //   .filter(post => post.id !== this.props.selectedPost.id)
+    //   .concat(add);
+    // this.setState({
+    //   mainPostList: editMainPost,
+    //   selectedPost: add
+  //   });
+  // }
+
+  // handleAddDownVote = () => {
+  //   const selectedPost = this.state.selectedPost;
+  //   const add = Object.assign({}, selectedPost, {downVote: selectedPost.downVote + 1});
+  //   const editMainPost = this.state.mainPostList
+  //     .filter(post => post.id !== this.state.selectedPost.id)
+  //     .concat(add);
+  //   this.setState({
+  //     mainPostList: editMainPost,
+  //     selectedPost: add
+  //   });
+  // }
+
+  handleAddDownVote = (id) => {
+    const setCount = this.props.mainPostList[id];
+    setCount.downVote +=1;
+    this.setState({setCount: setCount})
+  }
+  handleAddUpVote = (id) => {
+    const setCount = this.props.mainPostList[id];
+    setCount.upVote +=1;
+    this.setState({setCount: setCount})
+  }
+
+
+
+  
+
   render(){
     let currentlyVisibleState = null;
     let buttonText = null; 
@@ -108,7 +152,9 @@ class PostControl extends React.Component {
       currentlyVisibleState = <PostDetail 
       post={this.state.selectedPost} 
       onClickingDelete={this.handleDeletingPost}
-      onClickingEdit = {this.handleEditClick} />
+      onClickingEdit = {this.handleEditClick} 
+      onClickingUpVote = {this.handleAddUpVote}
+      onClickingDownVote = {this.handleAddDownVote}/>
       buttonText = "Return to Post List";
     } else if (this.props.formVisibleOnPage) {
       currentlyVisibleState = <NewPostForm onNewPostCreation={this.handleAddingNewPostToList}/>;

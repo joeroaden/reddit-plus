@@ -13,6 +13,8 @@ function PostList(props){
           topic={post.topic}
           postBody={post.postBody}
           formattedWaitTime={post.formattedWaitTime}
+          upVote={post.upVote}
+          downVote={post.downVote}
           id={post.id}
           key={post.id}/>
 })}

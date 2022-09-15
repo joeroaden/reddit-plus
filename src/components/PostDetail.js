@@ -9,6 +9,8 @@ function PostDetail(props){
       <h1>Post Details</h1>
       <h3>{post.topic} - {post.userName}</h3>
       <p><em>{post.postBody}</em></p>
+      <button onClick= {() => props.onClickingUpVote(post.id)}>UpVote</button>
+      <button onClick= {() => props.onClickingDownVote(post.id)}>DownVote</button>
       <button onClick={ props.onClickingEdit }>Update Post</button>
       <button onClick={()=> onClickingDelete(post.id) }>Delete Post</button> { /* new code */ }
       <hr/>
@@ -18,6 +20,8 @@ function PostDetail(props){
 
 PostDetail.propTypes = {
   post: PropTypes.object,
+  onClickingUpVote: PropTypes.func,
+  onClickingDownVote: PropTypes.func,
   onClickingDelete: PropTypes.func,
   onClickingEdit: PropTypes.func // new code
 };

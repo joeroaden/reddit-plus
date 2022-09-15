@@ -13,6 +13,8 @@ function EditPostForm (props) {
       postBody: event.target.postBody.value, 
       formattedWaitTime: post.formattedWaitTime,
       timeOpen: post.timeOpen,
+      upVote: post.upVote,
+      downVote: post.downVote,
       id: post.id
     });
   }
